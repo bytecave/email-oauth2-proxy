@@ -40,7 +40,7 @@ services:
       - "127.0.0.1:1993:1993"
     networks: [spamnet]
     environment:
-      TZ: Europe/Berlin
+      TZ: America/Los_Angeles
 
 networks:
   spamnet:
