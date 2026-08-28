@@ -1,0 +1,48 @@
+# ByteLord VPS deployment for email-oauth2-proxy.
+#
+# Deployed location: /opt/bytelord/compose/email-oauth2-proxy/compose.yaml
+# Source of truth:   email-oauth2-proxy/deploy/bytelord-compose.yaml
+# Secrets/config:    /opt/bytelord/secrets/email-oauth2-proxy.config  (mode 600)
+# Token cache/logs:  /opt/bytelord/data/email-oauth2-proxy/cache/
+# Repo checkout:     /opt/bytelord/projects/email-oauth2-proxy
+#
+# Joins existing spamnet (created by imap-spamfilter compose).
+# IMAP listen port published only on 127.0.0.1 for host-side debug.
+#
+# First-time setup:
+#   mkdir -p /opt/bytelord/data/email-oauth2-proxy/cache
+#   put filled emailproxy.config in /opt/bytelord/secrets/ (mode 600)
+#   docker compose -f /opt/bytelord/compose/email-oauth2-proxy/compose.yaml up -d --build
+#
+# git pull of the upstream clone does NOT touch /opt/bytelord/secrets or
+# /opt/bytelord/compose. Local Dockerfile/deploy overlays in the clone are
+# untracked and also survive pull (unless you delete them yourself).
+
+x-logging: &log-rotate
+  driver: json-file
+  options:
+    max-size: 50m
+    max-file: "5"
+
+services:
+  email-oauth2-proxy:
+    build:
+      context: /opt/bytelord/projects/email-oauth2-proxy
+    image: bytelord/email-oauth2-proxy:local
+    container_name: email-oauth2-proxy
+    restart: unless-stopped
+    logging: *log-rotate
+    user: "1001:1001"
+    volumes:
+      - /opt/bytelord/secrets/email-oauth2-proxy.config:/config/emailproxy.config:ro
+      - /opt/bytelord/data/email-oauth2-proxy/cache:/cache
+    ports:
+      - "127.0.0.1:1993:1993"
+    networks: [spamnet]
+    environment:
+      TZ: Europe/Berlin
+
+networks:
+  spamnet:
+    external: true
+    name: spamnet

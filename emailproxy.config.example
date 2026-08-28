@@ -1,0 +1,25 @@
+# ByteLord email-oauth2-proxy example (no secrets).
+# Runtime copy (secrets, mode 600): /opt/bytelord/secrets/email-oauth2-proxy.config
+# Token cache stays under /opt/bytelord/data/email-oauth2-proxy/cache/
+#
+# Inside Docker, local_address must be 0.0.0.0 so spamfilter on spamnet
+# can reach the proxy. Do not use 127.0.0.1 here.
+
+[IMAP-1993]
+server_address = outlook.office365.com
+server_port = 993
+local_address = 0.0.0.0
+
+# Microsoft 365 app-only (client credentials). One Entra app for the
+# whole tenant; add one section per mailbox after Add-MailboxPermission.
+[rich@bytecave.net]
+token_url = https://login.microsoftonline.com/REPLACE_TENANT_ID/oauth2/v2.0/token
+oauth2_scope = https://outlook.office365.com/.default
+oauth2_flow = client_credentials
+client_id = REPLACE_APPLICATION_CLIENT_ID
+client_secret = REPLACE_CLIENT_SECRET
+
+[emailproxy]
+delete_account_token_on_password_error = False
+encrypt_client_secret_on_first_use = True
+allow_catch_all_accounts = False
