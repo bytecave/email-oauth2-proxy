@@ -1,5 +1,9 @@
 # Files graphify leaves out of this repo's knowledge graph (gitignore syntax).
 
-# Handoff files (any path part with "handoff" in its name, in any case) always stay whole and are
-# kept out of every graph (Rich, 2026-10-06). graphify_extract.sh excludes them too.
-*[Hh][Aa][Nn][Dd][Oo][Ff][Ff]*
+# Handoff docs (.md and .txt files whose own name, or a folder above them, has "handoff" in it, in
+# any case) always stay whole and are kept out of every graph (Rich, 2026-10-06); code and config
+# named for handoffs are graphed as usual. graphify_extract.sh excludes the same patterns.
+*[Hh][Aa][Nn][Dd][Oo][Ff][Ff]*.[Mm][Dd]
+*[Hh][Aa][Nn][Dd][Oo][Ff][Ff]*.[Tt][Xx][Tt]
+**/*[Hh][Aa][Nn][Dd][Oo][Ff][Ff]*/**/*.[Mm][Dd]
+**/*[Hh][Aa][Nn][Dd][Oo][Ff][Ff]*/**/*.[Tt][Xx][Tt]
