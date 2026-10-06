@@ -1,0 +1,5 @@
+# Files graphify leaves out of this repo's knowledge graph (gitignore syntax).
+
+# Handoff files (any path part with "handoff" in its name, in any case) always stay whole and are
+# kept out of every graph (Rich, 2026-10-06). graphify_extract.sh excludes them too.
+*[Hh][Aa][Nn][Dd][Oo][Ff][Ff]*
